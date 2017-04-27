@@ -1,0 +1,24 @@
+{
+  "name": "elegy",
+  "version": "0.0.31",
+  "license": "MIT",
+  "author": {
+    "name": "Francesco Bianco",
+    "email": "bianco@javanile.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Javanile/watch-log.git"
+  },
+  "bin": {
+    "watch-log": "./bin/elegy"
+  },
+  "main": "./src/elegy.js",
+  "scripts": {
+    "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- -R spec --recursive"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
+  }
+}
