@@ -1,6 +1,6 @@
 {
     "name": "javanile/elegy",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "autoload": {
         "psr-4": {
             "Javanile\\Elegy\\": "src/"
