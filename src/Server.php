@@ -32,9 +32,9 @@ class Server
     {
         $pageClass = $this->getRoutePageClass();
 
-        $page = new $pageClass($this);
+        $pageObject = new $pageClass($this);
 
-        return $page->render();
+        return $pageObject->renderize();
     }
 
     public function getRouteTokens()
@@ -76,5 +76,10 @@ class Server
     public function getLayoutFile($name)
     {
         return $this->templatesDir . '/' . $name;
+    }
+
+    public function getConfigName()
+    {
+        return $this->configData['name'];
     }
 }
