@@ -25,4 +25,11 @@ class Builder extends Context
             file_put_contents($pageFile, $page->renderize());
         }
     }
+
+    public function getBuildPath($file = '')
+    {
+        $cwd = getcwd();
+
+        return $cwd.'/build/'.$file;
+    }
 }

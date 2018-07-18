@@ -20,8 +20,11 @@ class Server extends Context
      */
     public function run()
     {
-        $pageClass = $this->getRoutePageClass();
-        $page = new $pageClass($this);
+        if (empty($this->configData['pages'])) {
+            die('Empty "pages" into elegy.json');
+        }
+
+        $page = $this->getRoutePage();
 
         echo $page->renderize();
     }
@@ -29,20 +32,25 @@ class Server extends Context
     /**
      * @return string
      */
-    public function getRoutePageClass()
+    public function getRoutePage()
     {
         $pages = $this->configData['pages'];
-        $tokens = $this->getRouteTokens();
+        $slug = $this->getRouteSlug();
+        $tokens = $this->getTokensBySlug($slug);
         $depth = count($tokens) - 1;
+
         foreach ($tokens as $index => $token) {
             if (isset($pages[$token]) && $index == $depth && is_string($pages[$token])) {
-                return $this->getClassName($pages[$token]);
+                $pageClass = $this->getClassName($pages[$token]);
+                return new $pageClass($this, $slug);
             } elseif (isset($pages[$token]) && is_array($pages[$token]) && $index < $depth) {
                 $pages = $pages[$token];
             }
         }
 
-        return '\\Javanile\\Elegy\\Page404';
+        $page = new Page404($this, $slug);
+
+        return $page;
     }
 
     /**
@@ -50,14 +58,24 @@ class Server extends Context
      *
      * @return array
      */
-    public function getRouteTokens()
+    public function getRouteSlug()
     {
         $route = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
         if (!preg_match('/\.html$/i', $route)) {
-            return ['404'];
+            return '404';
         }
 
-        return explode('/', substr($route, 1, strlen($route) - 6));
+        return substr($route, 1, strlen($route) - 6);
+    }
+
+    /**
+     * Get browser URL tokens for routing.
+     *
+     * @return array
+     */
+    public function getTokensBySlug($slug)
+    {
+        return explode('/', $slug);
     }
 }

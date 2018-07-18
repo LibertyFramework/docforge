@@ -16,6 +16,7 @@ namespace Javanile\Elegy;
 abstract class Context
 {
     use Context\PagesTrait;
+    use Context\TemplatesTrait;
 
     /**
      * Configuration filename.

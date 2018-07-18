@@ -18,14 +18,32 @@ class Page
     /**
      * @var null
      */
-    protected $context = null;
+    protected $context;
+
+    /**
+     * Unique slug page identifier.
+     *
+     * @var string
+     */
+    protected $slug;
 
     /**
      * Constructor.
      */
-    public function __construct($context)
+    public function __construct($context, $slug)
     {
         $this->context = $context;
+        $this->slug = $slug;
+    }
+
+    public function getContext()
+    {
+        return $this->context;
+    }
+
+    public function isCurrent()
+    {
+        return false;
     }
 
     /**
@@ -33,9 +51,15 @@ class Page
      */
     public function renderize()
     {
-        $layoutFile = $this->context->getLayoutFile('index.php');
+        ob_start();
+
+        $layoutFile = $this->context->getTemplateFile('index.php');
 
         include $layoutFile;
+
+        $html = ob_get_clean();
+
+        return $html;
     }
 
     public function renderClass($class)
@@ -58,5 +82,20 @@ class Page
             echo htmlentities(trim($matchs[1]));
             echo '</code></pre>';
         }
+    }
+
+    public function getFileName()
+    {
+        return $this->slug.'.html';
+    }
+
+    public function getUrl()
+    {
+        return '/'.$this->slug.'.html';
+    }
+
+    public function getMenuLabel()
+    {
+        return $this->slug;
     }
 }
