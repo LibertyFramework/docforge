@@ -13,41 +13,22 @@
 
 namespace Javanile\Elegy;
 
-class Server
+class Server extends Context
 {
-    protected $configFile = null;
-
     /**
-     * Constructor.
+     * Rederize page by server routing.
      */
-    public function __construct($configFile)
-    {
-        $this->configFile = $configFile;
-        $this->configData = json_decode(file_get_contents($configFile), true);
-
-        $this->templatesDir = dirname($configFile) . '/templates';
-    }
-
     public function run()
     {
         $pageClass = $this->getRoutePageClass();
+        $page = new $pageClass($this);
 
-        $pageObject = new $pageClass($this);
-
-        return $pageObject->renderize();
+        echo $page->renderize();
     }
 
-    public function getRouteTokens()
-    {
-        $route = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-
-        if (!preg_match('/\.html$/i', $route)) {
-            return ['404'];
-        }
-
-        return explode('/', substr($route, 1, strlen($route) - 6));
-    }
-
+    /**
+     * @return string
+     */
     public function getRoutePageClass()
     {
         $pages = $this->configData['pages'];
@@ -61,25 +42,22 @@ class Server
             }
         }
 
-        return '404';
+        return '\\Javanile\\Elegy\\Page404';
     }
 
-    public function getClassName($class)
+    /**
+     * Get browser URL tokens for routing.
+     *
+     * @return array
+     */
+    public function getRouteTokens()
     {
-        if (isset($this->configData['namespace']) && $this->configData['namespace']) {
-            return trim($this->configData['namespace'], '\\') . '\\' . trim($class, '\\');
+        $route = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+        if (!preg_match('/\.html$/i', $route)) {
+            return ['404'];
         }
 
-        return trim($class, '\\');
-    }
-
-    public function getLayoutFile($name)
-    {
-        return $this->templatesDir . '/' . $name;
-    }
-
-    public function getConfigName()
-    {
-        return $this->configData['name'];
+        return explode('/', substr($route, 1, strlen($route) - 6));
     }
 }

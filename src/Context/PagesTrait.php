@@ -11,14 +11,11 @@
  * @license   -
  */
 
-namespace Javanile\Elegy;
+namespace Javanile\Elegy\Context;
 
-class Elegy
+trait PagesTrait
 {
-    /**
-     * Constructor.
-     */
-    public function __construct()
+    public function listAllPages()
     {
 
     }

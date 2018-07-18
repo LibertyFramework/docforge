@@ -1,10 +1,22 @@
-#!/usr/bin/env node
+#!/usr/bin/env php
+<?php
+/**
+ * Command-line Elegy.
+ *
+ * PHP version 5
+ *
+ * @category   Script
+ *
+ * @author     Francesco Bianco <bianco@javanile.org>
+ * @license    https://goo.gl/KPZ2qI  MIT License
+ * @copyright  2015-2017 Javanile.org
+ */
 
-"use strict";
-var cli = require("../src/cli");
-/*
-cli.parseArgs(process.argv.slice(2));
-var config = cli.checkConfig();
-require(config);
-*/
-cli.run(process.argv.slice(2));
+// include vendor autoload
+require_once __DIR__.'/../../../autoload.php';
+
+// prepare command-line interface
+$cli = new Javanile\Elegy\Cli();
+
+// run command-line
+$cli->run($argv);
