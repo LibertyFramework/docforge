@@ -36,7 +36,9 @@ class Server extends Context
     {
         $pages = $this->configData['pages'];
         $slug = $this->getRouteSlug();
+        var_dump($slug);
         $tokens = $this->getTokensBySlug($slug);
+        var_dump($tokens);
         $depth = count($tokens) - 1;
 
         foreach ($tokens as $index => $token) {
@@ -45,11 +47,13 @@ class Server extends Context
                 return new $pageClass($this, $slug);
             } elseif (isset($pages[$token]) && is_array($pages[$token]) && $index < $depth) {
                 $pages = $pages[$token];
+            } elseif (!isset($pages[$token])) {
+                $page = new Page404($this, $slug);
+                return $page;
             }
         }
 
         $page = new Page404($this, $slug);
-
         return $page;
     }
 
@@ -63,7 +67,7 @@ class Server extends Context
         $route = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
         if (!preg_match('/\.html$/i', $route)) {
-            return '404';
+            return $route != '/' ? trim($route, '/').'/index' : 'index';
         }
 
         return substr($route, 1, strlen($route) - 6);

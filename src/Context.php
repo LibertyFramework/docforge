@@ -26,12 +26,18 @@ abstract class Context
     protected $configFile;
 
     /**
+     * @var
+     */
+    protected $workingDir;
+
+    /**
      * Constructor.
      */
     public function __construct($configFile)
     {
         $this->configFile = $configFile;
         $this->configData = json_decode(file_get_contents($configFile), true);
+        $this->workingDir = dirname($configFile);
 
         $this->templatesDir = dirname($configFile) . '/templates';
     }
@@ -55,5 +61,14 @@ abstract class Context
         }
 
         return trim($class, '\\');
+    }
+
+    /**
+     * @param string $path
+     * @return string
+     */
+    public function getWorkingDir($path = '')
+    {
+        return $this->workingDir.'/'.$path;
     }
 }

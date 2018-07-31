@@ -15,5 +15,8 @@ namespace Javanile\Elegy;
 
 class Page404 extends Page
 {
-
+    public function content()
+    {
+        echo '<h1>404</h1>';
+    }
 }
