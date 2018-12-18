@@ -44,9 +44,14 @@ class Page
         return $this->context;
     }
 
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
     public function isCurrent()
     {
-        return false;
+        return $this->context->isCurrentPage($this);
     }
 
     /**

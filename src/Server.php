@@ -24,9 +24,9 @@ class Server extends Context
             die('Empty "pages" into elegy.json');
         }
 
-        $page = $this->getRoutePage();
+        $this->setCurrentPage($this->getRoutePage());
 
-        echo $page->renderize();
+        return $this->getCurrentPage()->renderize();
     }
 
     /**

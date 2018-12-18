@@ -17,6 +17,13 @@ trait RenderTrait
 {
     public function renderClass($class)
     {
+        if (!class_exists($class)) {
+            echo '<pre><code class="php">';
+            echo "Class '{$class}' not found.";
+            echo '</code></pre>';
+            return;
+        }
+
         $reflector = new \ReflectionClass($class);
         $file = $reflector->getFileName();
         $code = file_get_contents($file);
