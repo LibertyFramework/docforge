@@ -1,12 +1,14 @@
 # elegy
 
+## Get started
 
+Create new elegy site is simple 
 ```bash
-$ composer require javanile/elegy --dev
+$ npx elegy my-new-site
 ```
 
+Now start development server
 ```bash
-$ php -S vendor/javanile/elegy/server.php
+$ cd my-new-site
+$ npm run watch
 ```
-
-
