@@ -13,9 +13,9 @@
 
 namespace Javanile\Elegy\Page;
 
-trait RenderTrait
+trait PrintTrait
 {
-    public function renderClass($class)
+    public function printClass($class)
     {
         if (!class_exists($class)) {
             echo '<pre><code class="php">';
@@ -33,7 +33,7 @@ trait RenderTrait
         echo '</code></pre>';
     }
 
-    public function renderCodeBlock($file, $block)
+    public function printCodeBlock($file, $block)
     {
         $code = file_get_contents($file);
 

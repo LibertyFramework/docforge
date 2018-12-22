@@ -36,25 +36,20 @@ class Server extends Context
     {
         $pages = $this->configData['pages'];
         $slug = $this->getRouteSlug();
-        var_dump($slug);
         $tokens = $this->getTokensBySlug($slug);
-        var_dump($tokens);
         $depth = count($tokens) - 1;
 
         foreach ($tokens as $index => $token) {
-            if (isset($pages[$token]) && $index == $depth && is_string($pages[$token])) {
-                $pageClass = $this->getClassName($pages[$token]);
-                return new $pageClass($this, $slug);
-            } elseif (isset($pages[$token]) && is_array($pages[$token]) && $index < $depth) {
-                $pages = $pages[$token];
+            if (isset($pages[$token]) && is_string($pages[$token]) && $index == $depth) {
+                return $this->buildPage($pages[$token], $slug);
             } elseif (!isset($pages[$token])) {
-                $page = new Page404($this, $slug);
-                return $page;
+                return new Page404($this, $slug);
+            } elseif (is_array($pages[$token]) && $index < $depth) {
+                $pages = $pages[$token];
             }
         }
 
-        $page = new Page404($this, $slug);
-        return $page;
+        return new Page404($this, $slug);
     }
 
     /**

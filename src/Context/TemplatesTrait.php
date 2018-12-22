@@ -15,14 +15,10 @@ namespace Javanile\Elegy\Context;
 
 trait TemplatesTrait
 {
-
-
     public function getTemplateFile($name)
     {
         return $this->templatesDir . '/' . $name;
     }
-
-
 }
 
 

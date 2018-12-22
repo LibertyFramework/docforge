@@ -15,6 +15,7 @@ namespace Javanile\Elegy;
 
 abstract class Context
 {
+    use Context\CacheTrait;
     use Context\PagesTrait;
     use Context\TemplatesTrait;
 
@@ -40,14 +41,24 @@ abstract class Context
         $this->workingDir = dirname($configFile);
 
         $this->templatesDir = dirname($configFile) . '/templates';
+
+        $this->configData['pages'] = $this->sanitizePages($this->configData['pages']);
     }
 
     /**
      * @return mixed
      */
-    public function getConfigName()
+    public function getName()
     {
         return $this->configData['name'];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAuthor()
+    {
+        return $this->configData['author'] ?: 'someone';
     }
 
     /**
