@@ -44,10 +44,17 @@ class Server extends Context
                 return $this->buildPage($pages[$token], $slug);
             } elseif (!isset($pages[$token])) {
                 return new Page404($this, $slug);
-            } elseif (is_array($pages[$token]) && $index < $depth) {
+            } elseif (is_array($pages[$token])) {
                 $pages = $pages[$token];
             }
         }
+
+        //$this->buildPage
+
+
+        //var_Dump($pages);
+
+        //echo "AAA";
 
         return new Page404($this, $slug);
     }

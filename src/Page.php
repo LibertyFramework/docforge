@@ -24,6 +24,13 @@ class Page
     protected $context;
 
     /**
+     * Unique node page identifier.
+     *
+     * @var string
+     */
+    protected $node;
+
+    /**
      * Unique slug page identifier.
      *
      * @var string
@@ -33,10 +40,16 @@ class Page
     /**
      * Constructor.
      */
-    public function __construct($context, $slug)
+    public function __construct($context, $node, $slug = null)
     {
+        if ($slug === null) {
+            $slug = $node;
+        }
+
         $this->context = $context;
+        $this->node = $node;
         $this->slug = $slug;
+        $this->name = $this->node != 'index' ? ucwords(basename($this->node)) : 'Home';
     }
 
     /**
@@ -45,6 +58,14 @@ class Page
     public function getContext()
     {
         return $this->context;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNode()
+    {
+        return $this->node;
     }
 
     /**
@@ -122,6 +143,14 @@ class Page
     /**
      *
      */
+    public function content()
+    {
+
+    }
+
+    /**
+     *
+     */
     public function renderize()
     {
         ob_start();
@@ -156,7 +185,7 @@ class Page
      */
     public function getLabel()
     {
-        return $this->label ?: ($this->slug != 'index' ? ucwords($this->slug) : 'Home');
+        return $this->label ?: $this->name;
     }
 
     /**
