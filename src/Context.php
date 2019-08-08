@@ -11,7 +11,7 @@
  * @license   -
  */
 
-namespace Javanile\Elegy;
+namespace Javanile\DocForge;
 
 abstract class Context
 {

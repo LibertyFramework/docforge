@@ -16,7 +16,7 @@
 require_once __DIR__.'/../../../autoload.php';
 
 // prepare command-line interface
-$cli = new Javanile\Elegy\Cli();
+$cli = new Javanile\DocForge\Cli();
 
 // run command-line
 $cli->run($argv);

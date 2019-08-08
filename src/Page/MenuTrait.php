@@ -11,7 +11,7 @@
  * @license   -
  */
 
-namespace Javanile\Elegy\Page;
+namespace Javanile\DocForge\Page;
 
 trait MenuTrait
 {

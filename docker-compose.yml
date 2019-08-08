@@ -1,0 +1,18 @@
+version: '2'
+
+services:
+
+  php: &php
+    build: .
+    volumes:
+      - ./:/var/www/html
+    ports:
+      - 38080:80
+
+  composer:
+    <<: *php
+    entrypoint: ['composer']
+
+  phpunit:
+    <<: *php
+    entrypoint: ['./vendor/bin/phpunit']

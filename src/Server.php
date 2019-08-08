@@ -11,12 +11,12 @@
  * @license   -
  */
 
-namespace Javanile\Elegy;
+namespace Javanile\DocForge;
 
 class Server extends Context
 {
     /**
-     * Rederize page by server routing.
+     * Renderize page by server routing.
      */
     public function run()
     {

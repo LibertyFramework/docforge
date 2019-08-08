@@ -11,13 +11,13 @@
  * @license   -
  */
 
-namespace Javanile\Elegy;
+namespace Javanile\DocForge;
 
 class Cli
 {
     public function run($argv)
     {
-        $configFile = getcwd().'/elegy.json';
+        $configFile = getcwd().'/docforge.json';
         $builder = new Builder($configFile);
         $builder->run();
     }

@@ -11,10 +11,13 @@
  * @license   -
  */
 
-namespace Javanile\Elegy;
+namespace Javanile\DocForge;
 
 class Page404 extends Page
 {
+    /**
+     *
+     */
     public function content()
     {
         echo '<h1>404</h1>';

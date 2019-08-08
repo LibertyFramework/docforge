@@ -11,10 +11,13 @@
  * @license   -
  */
 
-namespace Javanile\Elegy;
+namespace Javanile\DocForge;
 
 class Builder extends Context
 {
+    /**
+     *
+     */
     public function run()
     {
         foreach ($this->listAllPages() as $page) {
@@ -26,6 +29,10 @@ class Builder extends Context
         }
     }
 
+    /**
+     * @param string $file
+     * @return string
+     */
     public function getBuildPath($file = '')
     {
         $cwd = getcwd();

@@ -1,0 +1,5 @@
+{
+  "source": "src",
+  "pages": "*.php",
+  "output": "docs"
+}

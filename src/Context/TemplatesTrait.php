@@ -11,7 +11,7 @@
  * @license   -
  */
 
-namespace Javanile\Elegy\Context;
+namespace Javanile\DocForge\Context;
 
 trait TemplatesTrait
 {

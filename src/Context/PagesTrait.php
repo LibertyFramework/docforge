@@ -11,10 +11,10 @@
  * @license   -
  */
 
-namespace Javanile\Elegy\Context;
+namespace Javanile\DocForge\Context;
 
-use Javanile\Elegy\Functions;
-use Javanile\Elegy\Page;
+use Javanile\DocForge\Functions;
+use Javanile\DocForge\Page;
 
 trait PagesTrait
 {
