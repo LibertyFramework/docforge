@@ -56,8 +56,6 @@ abstract class Scope
         $this->workingDir = dirname($configFile);
 
         $this->templatesDir = dirname($configFile) . '/templates';
-
-        //$this->configData['pages'] = $this->sanitizePages($this->configData['pages']);
     }
 
     /**

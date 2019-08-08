@@ -9,15 +9,15 @@ $currentRootPage = $scope->getCurrentRootPage();
 
 <div class="sidebar sidebar-left">
 
-    <?php if (!$currentRootPage->hasSubpages()) { ?>
-        <?php if ($scope->hasNonterminalRootPages()) { ?>
-            <?php foreach ($scope->listNonterminalRootPages() as $page) { ?>
+    <?php if (!$currentRootPage->hasSubPages()) { ?>
+        <?php if ($scope->hasNonTerminalRootPages()) { ?>
+            <?php foreach ($scope->listNonTerminalRootPages() as $page) { ?>
                 <h3 class="sidebar-category active"><?=$page->getLabel()?></h3>
                 <ul class="sidebar-links">
-                    <?php foreach ($page->listSubpages() as $subpage) { ?>
+                    <?php foreach ($page->listSubPages() as $subPage) { ?>
                         <li>
-                            <a <?=$subpage->isCurrent()?'class="active"':''?> href="<?=$subpage->getUrl()?>">
-                                <?=$subpage->getMenuLabel()?>
+                            <a <?=$subPage->isCurrent()?'class="active"':''?> href="<?=$subPage->getUrl()?>">
+                                <?=$subPage->getMenuLabel()?>
                             </a>
                         </li>
                     <?php } ?>
@@ -37,10 +37,10 @@ $currentRootPage = $scope->getCurrentRootPage();
         <?php } ?>
     <?php } ?>
 
-    <?php if ($currentRootPage->hasTerminalSubpages()) { ?>
+    <?php if ($currentRootPage->hasTerminalSubPages()) { ?>
         <h3 class="sidebar-category active"><?=$currentRootPage->getLabel()?></h3>
         <ul class="sidebar-links">
-            <?php foreach ($currentRootPage->listTerminalSubpages() as $page) { ?>
+            <?php foreach ($currentRootPage->listTerminalSubPages() as $page) { ?>
                 <li>
                     <a <?=$page->isCurrent()?'class="active"':''?> href="<?=$page->getUrl()?>">
                         <?=$page->getMenuLabel()?>
@@ -50,7 +50,7 @@ $currentRootPage = $scope->getCurrentRootPage();
         </ul>
     <?php } ?>
 
-    <?php if ($currentRootPage->hasNonterminalSubpages()) { ?>
+    <?php if ($currentRootPage->hasNonTerminalSubPages()) { ?>
         <?php foreach ($currentRootPage->listNonterminalSubpages() as $page) { ?>
             <h3 class="sidebar-category active"><?=$page->getLabel()?></h3>
             <ul class="sidebar-links">

@@ -55,7 +55,7 @@ trait PagesTrait
             return $this->getCache(__METHOD__, $node);
         }
 
-        $pages = $this->config['pages'];
+        $pages = $this->getPages();
         foreach (explode('/', $node) as $token) {
             $pages = isset($pages[$token]) ? $pages[$token] : null;
         }
@@ -68,6 +68,10 @@ trait PagesTrait
      */
     public function getPages()
     {
+        if ($this->hasCache(__METHOD__)) {
+            return $this->getCache(__METHOD__);
+        }
+
         $pages = [];
         $config = $this->config['pages'];
 
@@ -86,7 +90,7 @@ trait PagesTrait
             exit;
         }
 
-        return $pages;
+        return $this->setCache(__METHOD__, $pages);
     }
 
     /**
@@ -94,7 +98,15 @@ trait PagesTrait
      */
     public function fillPagesArray(&$pages, $key, $value)
     {
-        if (is_int($key) && Functions::isGlob($value)) {
+        if (is_array($value)) {
+            foreach ($value as $subKey => $subValue) {
+                if (empty($pages[$key])) {
+                    $pages[$key] = [];
+                }
+                $this->fillPagesArray($pages[$key], $subKey, $subValue);
+            }
+            return $pages;
+        } elseif (is_int($key) && Functions::isGlob($value)) {
             return $pages = array_merge($pages, $this->getPagesByGlob($value));
         } elseif (Functions::isSlug($key) && Functions::isGlob($value)) {
             return $pages = array_merge($pages, [$key => $this->getPagesByGlob($value)]);
@@ -112,6 +124,11 @@ trait PagesTrait
     {
         $base = realpath($this->getSourceDir());
         $offset = strlen($base) + 1;
+
+        if (preg_match('/^([a-z0-9_\/-]+\/)/i', $glob, $match)) {
+            $offset += strlen($match[1]);
+        }
+
         $pages = [];
         $paths = Glob::glob(Path::makeAbsolute($glob, $base));
 
@@ -148,11 +165,9 @@ trait PagesTrait
             return $this->getCache(__METHOD__);
         }
 
-        if (isset($this->config['pages']) && is_array($this->config['pages'])) {
-            foreach ($this->config['pages'] as $key => $item) {
-                if (!is_array($item)) {
-                    return $this->setCache(__METHOD__, true);
-                }
+        foreach ($this->getPages() as $key => $item) {
+            if (!is_array($item)) {
+                return $this->setCache(__METHOD__, true);
             }
         }
 
@@ -172,7 +187,7 @@ trait PagesTrait
         }
 
         $pages = [];
-        foreach ($this->config['pages'] as $key => $item) {
+        foreach ($this->getPages() as $key => $item) {
             if (!is_array($item)) {
                 $pages[$key] = $item;
             }
@@ -193,11 +208,9 @@ trait PagesTrait
             return $this->getCache(__METHOD__);
         }
 
-        if (isset($this->config['pages']) && is_array($this->config['pages'])) {
-            foreach ($this->config['pages'] as $key => $item) {
-                if (is_array($item)) {
-                    return $this->setCache(__METHOD__, true);
-                }
+        foreach ($this->getPages() as $key => $item) {
+            if (is_array($item)) {
+                return $this->setCache(__METHOD__, true);
             }
         }
 
@@ -217,7 +230,7 @@ trait PagesTrait
         }
 
         $pages = [];
-        foreach ($this->config['pages'] as $key => $item) {
+        foreach ($this->getPages() as $key => $item) {
             if (is_array($item)) {
                 $pages[$key] = $item;
             }
@@ -365,7 +378,7 @@ trait PagesTrait
             return $this->getCache(__METHOD__);
         }
 
-        return $this->setCache(__METHOD__, $this->buildPagesList($this->config['pages']));
+        return $this->setCache(__METHOD__, $this->buildPagesList($this->getPages()));
     }
 
     /**
@@ -378,7 +391,7 @@ trait PagesTrait
         }
 
         $pages = [];
-        $this->listAllPagesRecursive($this->config['pages'], $pages);
+        $this->listAllPagesRecursive($this->getPages(), $pages);
 
         return $this->setCache(__METHOD__, $pages);
     }
