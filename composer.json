@@ -1,17 +1,11 @@
 {
-    "name": "javanile/elegy",
+    "name": "javanile/docforge",
     "version": "0.0.15",
     "autoload": {
         "psr-4": {
-            "Javanile\\Elegy\\": "src/"
+            "Javanile\\DocForge\\": "src/"
         }
     },
-    "repositories": [
-        {
-            "type": "git",
-            "url": "https://github.com/javanile/elegy"
-        }
-    ],
     "require": {
         "erusev/parsedown": "^1.7"
     }

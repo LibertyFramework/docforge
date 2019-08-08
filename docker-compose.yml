@@ -11,8 +11,10 @@ services:
 
   composer:
     <<: *php
-    entrypoint: ['composer']
+    entrypoint:
+      - composer
 
   phpunit:
     <<: *php
-    entrypoint: ['./vendor/bin/phpunit']
+    entrypoint:
+      - ./vendor/bin/phpunit
