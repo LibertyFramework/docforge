@@ -22,36 +22,6 @@ trait PagesTrait
     /**
      *
      */
-    public function sanitizeSlug($slug)
-    {
-        return $slug;
-    }
-
-    /**
-     *
-     */
-    public function sanitizePages($pages)
-    {
-
-        return $pages;
-    }
-
-    /**
-     *
-     */
-    public function buildPage($item, $node, $slug = null)
-    {
-        $pageClass = $this->getClassName($item);
-        if (!class_exists($pageClass)) {
-            $pageClass = Page::class;
-        }
-
-        return new $pageClass($this, $node, $slug);
-    }
-
-    /**
-     *
-     */
     public function buildPagesList($pages, $base = '')
     {
         $pagesList = [];
@@ -75,30 +45,9 @@ trait PagesTrait
     }
 
     /**
-     * @param $array
-     * @return mixed
-     */
-    public static function getFirstPageRecursive($pages, &$slug)
-    {
-        if (!is_array($pages)) {
-            return $pages;
-        }
-
-        $firstValue = array_pop(array_reverse($pages));
-        $firstKey = array_keys($pages)[0];
-        $slug = $slug.'/'.$firstKey;
-
-        if (is_array($firstValue)) {
-            return static::getFirstPageRecursive($firstValue, $slug);
-        }
-
-        return $firstValue;
-    }
-
-    /**
      *
      */
-    public function getConfigSubpagesByNode($node)
+    public function getConfigSubPagesByNode($node)
     {
         if ($this->hasCache(__METHOD__, $node)) {
             return $this->getCache(__METHOD__, $node);
@@ -113,55 +62,34 @@ trait PagesTrait
     }
 
     /**
-     * @param $page
+     * @return array
      */
-    public function setCurrentPage($page)
-    {
-        $this->currentPage = $page;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCurrentPage()
-    {
-        return $this->currentPage;
-    }
-
-
     public function getPages()
     {
-        return $this->configData['name'];
+        $pages = [];
+        $config = $this->config['pages'];
+
+        if (is_array($config) && $config) {
+            foreach ($config as $key => $value) {
+                $this->fillPagesArray($pages, $key, $value);
+            }
+        } else {
+            $this->fillPagesArray($pages, 0, $config);
+        }
+
+        echo '<pre>';
+        var_dump($pages);
+        echo '</pre>';
+        die();
+        return $pages;
     }
 
-public function getPage404($slug  = '404')
-{
-    return new Page404($this, $slug);
-}
-
     /**
-     * @param $page
-     * @return bool
-     */
-    public function isCurrentPage($page)
-    {
-        return $this->currentPage->getSlug() == $page->getSlug()
-            || $this->currentPage->getNode() == $page->getNode();
-    }
-
-    /**
-     * Check if page is parent of current page.
      *
-     * @param $page
-     * @return bool
      */
-    public function isParentOfCurrentPage($page)
+    public function fillPagesArray(&$pages, $key, $value)
     {
-        $node = $page->getNode().'/';
-        $currentNode = $this->currentPage->getNode();
-        $currentNodeCut = substr($currentNode, 0, strlen($node));
 
-        return $node == $currentNodeCut;
     }
 
     /**
@@ -341,7 +269,7 @@ public function getPage404($slug  = '404')
      * @param $page
      * @return bool
      */
-    public function hasNonterminalSubpages($page)
+    public function hasNonTerminalSubPages($page)
     {
         $node = $page->getNode();
         if ($this->hasCache(__METHOD__, $node)) {
@@ -364,7 +292,7 @@ public function getPage404($slug  = '404')
      * @param $page
      * @return bool
      */
-    public function listNonterminalSubpages($page)
+    public function listNonTerminalSubpages($page)
     {
         $node = $page->getNode();
         if ($this->hasCache(__METHOD__, $node)) {
@@ -424,22 +352,5 @@ public function getPage404($slug  = '404')
                 $pages[] = $this->buildPage($item, $base.$id);
             }
         }
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCurrentRootPage()
-    {
-        foreach ($this->listRootPages() as $page) {
-            if ($this->isCurrentPage($page)) {
-                return $page;
-            }
-            if ($this->isParentOfCurrentPage($page)) {
-                return $page;
-            }
-        }
-
-        return new Page404($this, '404');
     }
 }
