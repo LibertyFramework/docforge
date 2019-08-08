@@ -13,15 +13,15 @@
 
 namespace Javanile\DocForge;
 
-class Server extends Context
+class Server extends Scope
 {
     /**
-     * Renderize page by server routing.
+     * Render page by server routing.
      */
     public function run()
     {
-        if (empty($this->configData['pages'])) {
-            die('Empty "pages" into elegy.json');
+        if (empty($this->configData['pages']) || !$this->configData['pages']) {
+            die('Empty "pages" into docforge.json');
         }
 
         $this->setCurrentPage($this->getRoutePage());
@@ -34,8 +34,12 @@ class Server extends Context
      */
     public function getRoutePage()
     {
-        $pages = $this->configData['pages'];
+        $pages = $this->getPages();
+        var_dump($pages);
         $slug = $this->getRouteSlug();
+
+        var_dump($slug);
+
         $tokens = $this->getTokensBySlug($slug);
         $depth = count($tokens) - 1;
 
@@ -43,20 +47,17 @@ class Server extends Context
             if (isset($pages[$token]) && is_string($pages[$token]) && $index == $depth) {
                 return $this->buildPage($pages[$token], $slug);
             } elseif (!isset($pages[$token])) {
-                return new Page404($this, $slug);
+                return $this->getPage404($slug);
             } elseif (is_array($pages[$token])) {
                 $pages = $pages[$token];
             }
         }
 
         //$this->buildPage
-
-
         //var_Dump($pages);
-
         //echo "AAA";
 
-        return new Page404($this, $slug);
+        return $this->getPage404($slug);
     }
 
     /**
@@ -78,6 +79,7 @@ class Server extends Context
     /**
      * Get browser URL tokens for routing.
      *
+     * @param $slug
      * @return array
      */
     public function getTokensBySlug($slug)

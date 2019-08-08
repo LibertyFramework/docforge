@@ -11,7 +11,7 @@
  * @license   -
  */
 
-namespace Javanile\DocForge\Context;
+namespace Javanile\DocForge\Scope;
 
 use Javanile\DocForge\Functions;
 use Javanile\DocForge\Page;

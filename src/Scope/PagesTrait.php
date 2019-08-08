@@ -11,10 +11,11 @@
  * @license   -
  */
 
-namespace Javanile\DocForge\Context;
+namespace Javanile\DocForge\Scope;
 
 use Javanile\DocForge\Functions;
 use Javanile\DocForge\Page;
+use Javanile\DocForge\Page404;
 
 trait PagesTrait
 {
@@ -31,6 +32,7 @@ trait PagesTrait
      */
     public function sanitizePages($pages)
     {
+
         return $pages;
     }
 
@@ -54,22 +56,23 @@ trait PagesTrait
     {
         $pagesList = [];
 
-        foreach ($pages as $node => $item) {
-            $slug = $node;
-            if (is_array($item)) {
-                $item = static::getFirstPageRecursive($item, $slug);
-            }
+        if (is_array($pages) && $pages) {
+            foreach ($pages as $node => $item) {
+                $slug = $node;
+                if (is_array($item)) {
+                    $item = static::getFirstPageRecursive($item, $slug);
+                }
 
-            $pagesList[] = $this->buildPage(
-                $item,
-                $base ? $base.'/'.$node : $node,
-                $base ? $base.'/'.$slug : $slug
-            );
+                $pagesList[] = $this->buildPage(
+                    $item,
+                    $base ? $base.'/'.$node : $node,
+                    $base ? $base.'/'.$slug : $slug
+                );
+            }
         }
 
         return $pagesList;
     }
-
 
     /**
      * @param $array
@@ -125,6 +128,17 @@ trait PagesTrait
         return $this->currentPage;
     }
 
+
+    public function getPages()
+    {
+        return $this->configData['name'];
+    }
+
+public function getPage404($slug  = '404')
+{
+    return new Page404($this, $slug);
+}
+
     /**
      * @param $page
      * @return bool
@@ -162,9 +176,11 @@ trait PagesTrait
             return $this->getCache(__METHOD__);
         }
 
-        foreach ($this->configData['pages'] as $key => $item) {
-            if (!is_array($item)) {
-                return $this->setCache(__METHOD__, true);
+        if (isset($this->configData['pages']) && is_array($this->configData['pages'])) {
+            foreach ($this->configData['pages'] as $key => $item) {
+                if (!is_array($item)) {
+                    return $this->setCache(__METHOD__, true);
+                }
             }
         }
 
@@ -199,15 +215,17 @@ trait PagesTrait
      * @param $page
      * @return bool
      */
-    public function hasNonterminalRootPages()
+    public function hasNonTerminalRootPages()
     {
         if ($this->hasCache(__METHOD__)) {
             return $this->getCache(__METHOD__);
         }
 
-        foreach ($this->configData['pages'] as $key => $item) {
-            if (is_array($item)) {
-                return $this->setCache(__METHOD__, true);
+        if (isset($this->configData['pages']) && is_array($this->configData['pages'])) {
+            foreach ($this->configData['pages'] as $key => $item) {
+                if (is_array($item)) {
+                    return $this->setCache(__METHOD__, true);
+                }
             }
         }
 
@@ -220,7 +238,7 @@ trait PagesTrait
      * @param $page
      * @return bool
      */
-    public function listNonterminalRootPages()
+    public function listNonTerminalRootPages()
     {
         if ($this->hasCache(__METHOD__)) {
             return $this->getCache(__METHOD__);
@@ -243,7 +261,7 @@ trait PagesTrait
      * @param $page
      * @return bool
      */
-    public function hasSubpages($page)
+    public function hasSubPages($page)
     {
         $node = $page->getNode();
         if ($this->hasCache(__METHOD__, $node)) {
@@ -257,14 +275,14 @@ trait PagesTrait
      * @param $page
      * @return bool
      */
-    public function listSubpages($page)
+    public function listSubPages($page)
     {
         $node = $page->getNode();
         if ($this->hasCache(__METHOD__, $node)) {
             return $this->getCache(__METHOD__, $node);
         }
 
-        $pages = $this->getConfigSubpagesByNode($node);
+        $pages = $this->getConfigSubPagesByNode($node);
         if (!is_array($pages)) {
             return $this->setCache(__METHOD__, $node, []);
         }
@@ -276,14 +294,14 @@ trait PagesTrait
      * @param $page
      * @return bool
      */
-    public function hasTerminalSubpages($page)
+    public function hasTerminalSubPages($page)
     {
         $node = $page->getNode();
         if ($this->hasCache(__METHOD__, $node)) {
             return $this->getCache(__METHOD__, $node);
         }
 
-        $subpages = $this->getConfigSubpagesByNode($node);
+        $subpages = $this->getConfigSubPagesByNode($node);
         if (is_array($subpages)) {
             foreach ($subpages as $key => $item) {
                 if (!is_array($item)) {
@@ -299,7 +317,7 @@ trait PagesTrait
      * @param $page
      * @return bool
      */
-    public function listTerminalSubpages($page)
+    public function listTerminalSubPages($page)
     {
         $node = $page->getNode();
         if ($this->hasCache(__METHOD__, $node)) {
@@ -421,5 +439,7 @@ trait PagesTrait
                 return $page;
             }
         }
+
+        return new Page404($this, '404');
     }
 }

@@ -13,11 +13,11 @@
 
 namespace Javanile\DocForge;
 
-abstract class Context
+abstract class Scope
 {
-    use Context\CacheTrait;
-    use Context\PagesTrait;
-    use Context\TemplatesTrait;
+    use Scope\CacheTrait;
+    use Scope\PagesTrait;
+    use Scope\TemplatesTrait;
 
     /**
      * Configuration filename.
@@ -27,12 +27,26 @@ abstract class Context
     protected $configFile;
 
     /**
+     * Configuration filename.
+     *
+     * @var string
+     */
+    protected $configData;
+
+    /**
      * @var
      */
     protected $workingDir;
 
     /**
+     * @var
+     */
+    protected $templatesDir;
+
+    /**
      * Constructor.
+     *
+     * @param $configFile
      */
     public function __construct($configFile)
     {
@@ -50,7 +64,7 @@ abstract class Context
      */
     public function getName()
     {
-        return $this->configData['name'];
+        return isset($this->configData['name']) ? $this->configData['name'] : basename($this->workingDir);
     }
 
     /**

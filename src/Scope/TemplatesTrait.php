@@ -11,7 +11,7 @@
  * @license   -
  */
 
-namespace Javanile\DocForge\Context;
+namespace Javanile\DocForge\Scope;
 
 trait TemplatesTrait
 {
