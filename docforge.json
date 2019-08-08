@@ -1,5 +1,9 @@
 {
+  "namespace": "\\Javanile\\DocForge",
+  "pages": {
+    "index": "Page",
+    "docs": "**/*.php"
+  },
   "source": "src",
-  "pages": "*.php",
   "output": "docs"
 }

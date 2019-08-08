@@ -54,23 +54,6 @@ trait PageTrait
     }
 
     /**
-     *
-     */
-    public function getConfigSubpagesByNode($node)
-    {
-        if ($this->hasCache(__METHOD__, $node)) {
-            return $this->getCache(__METHOD__, $node);
-        }
-
-        $pages = $this->configData['pages'];
-        foreach (explode('/', $node) as $token) {
-            $pages = isset($pages[$token]) ? $pages[$token] : null;
-        }
-
-        return $this->setCache(__METHOD__, $node, $pages);
-    }
-
-    /**
      * @param $page
      */
     public function setCurrentPage($page)

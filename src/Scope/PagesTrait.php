@@ -16,6 +16,8 @@ namespace Javanile\DocForge\Scope;
 use Javanile\DocForge\Functions;
 use Javanile\DocForge\Page;
 use Javanile\DocForge\Page404;
+use Webmozart\Glob\Glob;
+use Webmozart\PathUtil\Path;
 
 trait PagesTrait
 {
@@ -53,7 +55,7 @@ trait PagesTrait
             return $this->getCache(__METHOD__, $node);
         }
 
-        $pages = $this->configData['pages'];
+        $pages = $this->config['pages'];
         foreach (explode('/', $node) as $token) {
             $pages = isset($pages[$token]) ? $pages[$token] : null;
         }
@@ -77,10 +79,13 @@ trait PagesTrait
             $this->fillPagesArray($pages, 0, $config);
         }
 
-        echo '<pre>';
-        var_dump($pages);
-        echo '</pre>';
-        die();
+        if (isset($_GET['debug_pages']) && $_GET['debug_pages']) {
+            echo '<pre>';
+            var_dump($pages);
+            echo '</pre>';
+            exit;
+        }
+
         return $pages;
     }
 
@@ -89,7 +94,46 @@ trait PagesTrait
      */
     public function fillPagesArray(&$pages, $key, $value)
     {
+        if (is_int($key) && Functions::isGlob($value)) {
+            return $pages = array_merge($pages, $this->getPagesByGlob($value));
+        } elseif (Functions::isSlug($key) && Functions::isGlob($value)) {
+            return $pages = array_merge($pages, [$key => $this->getPagesByGlob($value)]);
+        } elseif (Functions::isSlug($key) && $this->isClassName($value)) {
+            return $pages = array_merge($pages, [$key => $this->getClassName($value)]);
+        }
 
+        die('Error on "pages" block at: '.json_encode([$key => $value]));
+    }
+
+    /**
+     * @param $glob
+     */
+    public function getPagesByGlob($glob)
+    {
+        $base = realpath($this->getSourceDir());
+        $offset = strlen($base) + 1;
+        $pages = [];
+        $paths = Glob::glob(Path::makeAbsolute($glob, $base));
+
+        foreach ($paths as $file) {
+            $path = explode('/', dirname(substr($file, $offset)));
+            $temp = &$pages;
+            foreach ($path as $index => $slug) {
+                if ($slug == '.') {
+                    $temp[Functions::getFileSlug($file)] = $file;
+                    break;
+                }
+                $temp = &$temp[$slug];
+                if (!is_array($temp)) {
+                    $temp = [];
+                }
+                if ($index+1 == count($path)) {
+                    $temp[Functions::getFileSlug($file)] = $file;
+                }
+            }
+        }
+
+        return $pages;
     }
 
     /**
@@ -104,8 +148,8 @@ trait PagesTrait
             return $this->getCache(__METHOD__);
         }
 
-        if (isset($this->configData['pages']) && is_array($this->configData['pages'])) {
-            foreach ($this->configData['pages'] as $key => $item) {
+        if (isset($this->config['pages']) && is_array($this->config['pages'])) {
+            foreach ($this->config['pages'] as $key => $item) {
                 if (!is_array($item)) {
                     return $this->setCache(__METHOD__, true);
                 }
@@ -128,7 +172,7 @@ trait PagesTrait
         }
 
         $pages = [];
-        foreach ($this->configData['pages'] as $key => $item) {
+        foreach ($this->config['pages'] as $key => $item) {
             if (!is_array($item)) {
                 $pages[$key] = $item;
             }
@@ -149,8 +193,8 @@ trait PagesTrait
             return $this->getCache(__METHOD__);
         }
 
-        if (isset($this->configData['pages']) && is_array($this->configData['pages'])) {
-            foreach ($this->configData['pages'] as $key => $item) {
+        if (isset($this->config['pages']) && is_array($this->config['pages'])) {
+            foreach ($this->config['pages'] as $key => $item) {
                 if (is_array($item)) {
                     return $this->setCache(__METHOD__, true);
                 }
@@ -173,7 +217,7 @@ trait PagesTrait
         }
 
         $pages = [];
-        foreach ($this->configData['pages'] as $key => $item) {
+        foreach ($this->config['pages'] as $key => $item) {
             if (is_array($item)) {
                 $pages[$key] = $item;
             }
@@ -321,7 +365,7 @@ trait PagesTrait
             return $this->getCache(__METHOD__);
         }
 
-        return $this->setCache(__METHOD__, $this->buildPagesList($this->configData['pages']));
+        return $this->setCache(__METHOD__, $this->buildPagesList($this->config['pages']));
     }
 
     /**
@@ -334,7 +378,7 @@ trait PagesTrait
         }
 
         $pages = [];
-        $this->listAllPagesRecursive($this->configData['pages'], $pages);
+        $this->listAllPagesRecursive($this->config['pages'], $pages);
 
         return $this->setCache(__METHOD__, $pages);
     }

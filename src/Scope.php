@@ -90,11 +90,29 @@ abstract class Scope
     }
 
     /**
+     * @param $class
+     * @return string
+     */
+    public function isClassName($class)
+    {
+        return class_exists($this->getClassName($class));
+    }
+
+    /**
      * @param string $path
      * @return string
      */
     public function getWorkingDir($path = '')
     {
         return $this->workingDir.'/'.$path;
+    }
+
+    /**
+     * @param string $path
+     * @return string
+     */
+    public function getSourceDir()
+    {
+        return isset($this->config['source']) ? $this->workingDir.'/'.$this->config['source'] : $this->workingDir;
     }
 }

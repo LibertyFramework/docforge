@@ -49,7 +49,7 @@ trait PrintTrait
      */
     public function renderMarkdown($file)
     {
-        $text = file_get_contents($this->getContext()->getWorkingDir($file));
+        $text = file_get_contents($this->getScope()->getWorkingDir($file));
 
         $parse = new \Parsedown();
 

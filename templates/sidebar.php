@@ -3,15 +3,15 @@
  *
  */
 
-$context = $this->getContext();
-$currentRootPage = $context->getCurrentRootPage();
+$scope = $this->getScope();
+$currentRootPage = $scope->getCurrentRootPage();
 ?>
 
 <div class="sidebar sidebar-left">
 
     <?php if (!$currentRootPage->hasSubpages()) { ?>
-        <?php if ($context->hasNonterminalRootPages()) { ?>
-            <?php foreach ($context->listNonterminalRootPages() as $page) { ?>
+        <?php if ($scope->hasNonterminalRootPages()) { ?>
+            <?php foreach ($scope->listNonterminalRootPages() as $page) { ?>
                 <h3 class="sidebar-category active"><?=$page->getLabel()?></h3>
                 <ul class="sidebar-links">
                     <?php foreach ($page->listSubpages() as $subpage) { ?>
@@ -23,10 +23,10 @@ $currentRootPage = $context->getCurrentRootPage();
                     <?php } ?>
                 </ul>
             <?php } ?>
-        <?php } elseif ($context->hasTerminalRootPages()) { ?>
+        <?php } elseif ($scope->hasTerminalRootPages()) { ?>
             <h3 class="sidebar-category active">Menu</h3>
             <ul class="sidebar-links">
-                <?php foreach ($context->listTerminalRootPages() as $page) { ?>
+                <?php foreach ($scope->listTerminalRootPages() as $page) { ?>
                     <li>
                         <a <?=$page->isCurrent()?'class="active"':''?> href="<?=$page->getUrl()?>">
                             <?=$page->getMenuLabel()?>
