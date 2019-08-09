@@ -21,7 +21,7 @@ class Page
     /**
      * @var null
      */
-    protected $context;
+    protected $scope;
 
     /**
      * Unique node page identifier.
@@ -40,13 +40,13 @@ class Page
     /**
      * Constructor.
      */
-    public function __construct($context, $node, $slug = null)
+    public function __construct($scope, $node, $slug = null)
     {
         if ($slug === null) {
             $slug = $node;
         }
 
-        $this->context = $context;
+        $this->scope = $scope;
         $this->node = $node;
         $this->slug = $slug;
         $this->name = $this->node != 'index' ? ucwords(basename($this->node)) : 'Home';
@@ -55,9 +55,9 @@ class Page
     /**
      * @return null
      */
-    public function getContext()
+    public function getScope()
     {
-        return $this->context;
+        return $this->scope;
     }
 
     /**
@@ -81,7 +81,7 @@ class Page
      */
     public function isCurrent()
     {
-        return $this->context->isCurrentPage($this);
+        return $this->scope->isCurrentPage($this);
     }
 
     /**
@@ -89,7 +89,7 @@ class Page
      */
     public function isParentOfCurrent()
     {
-        return $this->context->isParentOfCurrentPage($this);
+        return $this->scope->isParentOfCurrentPage($this);
     }
 
     /**
@@ -97,7 +97,7 @@ class Page
      */
     public function hasSubpages()
     {
-        return $this->context->hasSubpages($this);
+        return $this->scope->hasSubpages($this);
     }
 
     /**
@@ -105,7 +105,7 @@ class Page
      */
     public function listSubpages()
     {
-        return $this->context->listSubpages($this);
+        return $this->scope->listSubpages($this);
     }
 
     /**
@@ -113,7 +113,7 @@ class Page
      */
     public function hasTerminalSubpages()
     {
-        return $this->context->hasTerminalSubpages($this);
+        return $this->scope->hasTerminalSubpages($this);
     }
 
     /**
@@ -121,7 +121,7 @@ class Page
      */
     public function listTerminalSubpages()
     {
-        return $this->context->listTerminalSubpages($this);
+        return $this->scope->listTerminalSubpages($this);
     }
 
     /**
@@ -129,7 +129,7 @@ class Page
      */
     public function hasNonterminalSubpages()
     {
-        return $this->context->hasNonterminalSubpages($this);
+        return $this->scope->hasNonterminalSubpages($this);
     }
 
     /**
@@ -137,7 +137,7 @@ class Page
      */
     public function listNonterminalSubpages()
     {
-        return $this->context->listNonterminalSubpages($this);
+        return $this->scope->listNonterminalSubpages($this);
     }
 
     /**
@@ -155,7 +155,7 @@ class Page
     {
         ob_start();
 
-        $layoutFile = $this->context->getTemplateFile('index.php');
+        $layoutFile = $this->scope->getTemplateFile('index.php');
 
         include $layoutFile;
 

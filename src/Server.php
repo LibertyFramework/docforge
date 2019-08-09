@@ -20,10 +20,6 @@ class Server extends Scope
      */
     public function run()
     {
-        if (empty($this->configData['pages']) || !$this->configData['pages']) {
-            die('Empty "pages" into docforge.json');
-        }
-
         $this->setCurrentPage($this->getRoutePage());
 
         return $this->getCurrentPage()->renderize();
@@ -35,13 +31,13 @@ class Server extends Scope
     public function getRoutePage()
     {
         $pages = $this->getPages();
-        var_dump($pages);
         $slug = $this->getRouteSlug();
-
-        var_dump($slug);
-
         $tokens = $this->getTokensBySlug($slug);
         $depth = count($tokens) - 1;
+
+        if (isset($_GET['debug_tokens']) && $_GET['debug_tokens']) {
+            echo '<div>'.implode(' > ', $tokens).' ('.$slug.')</div>';
+        }
 
         foreach ($tokens as $index => $token) {
             if (isset($pages[$token]) && is_string($pages[$token]) && $index == $depth) {

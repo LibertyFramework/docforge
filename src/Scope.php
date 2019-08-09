@@ -16,6 +16,7 @@ namespace Javanile\DocForge;
 abstract class Scope
 {
     use Scope\CacheTrait;
+    use Scope\PageTrait;
     use Scope\PagesTrait;
     use Scope\TemplatesTrait;
 
@@ -31,7 +32,7 @@ abstract class Scope
      *
      * @var string
      */
-    protected $configData;
+    protected $config;
 
     /**
      * @var
@@ -51,12 +52,10 @@ abstract class Scope
     public function __construct($configFile)
     {
         $this->configFile = $configFile;
-        $this->configData = json_decode(file_get_contents($configFile), true);
+        $this->config = json_decode(file_get_contents($configFile), true);
         $this->workingDir = dirname($configFile);
 
         $this->templatesDir = dirname($configFile) . '/templates';
-
-        $this->configData['pages'] = $this->sanitizePages($this->configData['pages']);
     }
 
     /**
@@ -64,7 +63,7 @@ abstract class Scope
      */
     public function getName()
     {
-        return isset($this->configData['name']) ? $this->configData['name'] : 'docforge';
+        return isset($this->config['name']) ? $this->config['name'] : 'docforge';
     }
 
     /**
@@ -72,7 +71,7 @@ abstract class Scope
      */
     public function getAuthor()
     {
-        return $this->configData['author'] ?: 'someone';
+        return $this->config['author'] ?: 'someone';
     }
 
     /**
@@ -81,11 +80,20 @@ abstract class Scope
      */
     public function getClassName($class)
     {
-        if (isset($this->configData['namespace']) && $this->configData['namespace']) {
-            return trim($this->configData['namespace'], '\\') . '\\' . trim($class, '\\');
+        if (isset($this->config['namespace']) && $this->config['namespace']) {
+            return trim($this->config['namespace'], '\\') . '\\' . trim($class, '\\');
         }
 
         return trim($class, '\\');
+    }
+
+    /**
+     * @param $class
+     * @return string
+     */
+    public function isClassName($class)
+    {
+        return class_exists($this->getClassName($class));
     }
 
     /**
@@ -95,5 +103,14 @@ abstract class Scope
     public function getWorkingDir($path = '')
     {
         return $this->workingDir.'/'.$path;
+    }
+
+    /**
+     * @param string $path
+     * @return string
+     */
+    public function getSourceDir()
+    {
+        return isset($this->config['source']) ? $this->workingDir.'/'.$this->config['source'] : $this->workingDir;
     }
 }

@@ -27,7 +27,11 @@
                 </div>
             </div>
 
-            <p class="copyright align-center">Made with 🌭 by Kyle Logue. Licensed under the MIT License.</p>
+            <p class="copyright align-center">
+                Made with <img src="https://www.php.net/images/logos/php-icon.png" style="vertical-align:middle" alt="PHP">
+                by Kyle Logue.
+                Licensed under the <?='MIT License'?>.
+            </p>
 
         </footer>
     </body>
