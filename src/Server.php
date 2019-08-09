@@ -35,7 +35,9 @@ class Server extends Scope
         $tokens = $this->getTokensBySlug($slug);
         $depth = count($tokens) - 1;
 
-        echo '<div>'.implode(' > ', $tokens).' ('.$slug.')</div>';
+        if (isset($_GET['debug_tokens']) && $_GET['debug_tokens']) {
+            echo '<div>'.implode(' > ', $tokens).' ('.$slug.')</div>';
+        }
 
         foreach ($tokens as $index => $token) {
             if (isset($pages[$token]) && is_string($pages[$token]) && $index == $depth) {
