@@ -64,7 +64,7 @@ abstract class Scope
      */
     public function getName()
     {
-        return isset($this->configData['name']) ? $this->configData['name'] : basename($this->workingDir);
+        return isset($this->configData['name']) ? $this->configData['name'] : 'docforge';
     }
 
     /**
