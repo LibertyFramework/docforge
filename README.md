@@ -2,9 +2,9 @@
 
 ## Get started
 
-Create new website is simple 
+Create new website from scratch 
 ```bash
-$ npx docforge website
+$ composer create-project docforge/skeleton website 
 ```
 
 Now start development server

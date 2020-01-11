@@ -1,9 +1,9 @@
 {
-    "name": "javanile/docforge",
+    "name": "docforge/docforge",
     "version": "0.0.15",
     "autoload": {
         "psr-4": {
-            "Javanile\\DocForge\\": "src/"
+            "DocForge\\DocForge\\": "src/"
         }
     },
     "require": {
