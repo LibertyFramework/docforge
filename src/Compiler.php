@@ -13,7 +13,7 @@
 
 namespace Javanile\DocForge;
 
-class Cli
+class Compiler
 {
     public function run($argv)
     {

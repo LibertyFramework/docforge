@@ -8526,6 +8526,19 @@ nav, .nav {
   background: #4F5B93;
 }
 
+.nav-search {
+  width: 400px;
+}
+
+.nav-search table {
+  margin: 0;
+  border-collapse: separate;
+}
+
+.nav-search table tbody td {
+  padding: 0;
+}
+
 .sidebar-category {
   background: none;
 }

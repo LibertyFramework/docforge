@@ -3,20 +3,15 @@
 /**
  * Command-line Elegy.
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category   Script
  *
  * @author     Francesco Bianco <bianco@javanile.org>
  * @license    https://goo.gl/KPZ2qI  MIT License
- * @copyright  2015-2017 Javanile.org
+ * @copyright  2015-2020 Javanile.org
  */
 
-// include vendor autoload
 require_once __DIR__.'/../../../autoload.php';
 
-// prepare command-line interface
-$cli = new Javanile\DocForge\Cli();
-
-// run command-line
-$cli->run($argv);
+(new Javanile\DocForge\Compiler())->run($argv);

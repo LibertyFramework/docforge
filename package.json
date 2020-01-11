@@ -1,5 +1,6 @@
 {
   "name": "docforge",
+  "version": "0.0.15",
   "bin": {
     "docforge": "docforge.js"
   },

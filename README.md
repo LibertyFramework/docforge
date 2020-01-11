@@ -1,14 +1,17 @@
-# elegy
+# DocForge
 
 ## Get started
 
-Create new elegy site is simple 
+Create new website is simple 
 ```bash
-$ npx elegy my-new-site
+$ npx docforge website
 ```
 
 Now start development server
 ```bash
-$ cd my-new-site
+$ cd website
+$ composer install
 $ npm run watch
 ```
+
+./vendor
