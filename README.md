@@ -12,6 +12,21 @@ Now start development server
 $ cd website
 $ composer install
 $ npm run watch
+
 ```
 
 ./vendor
+
+
+
+        "erusev/parsedown": "^1.7",
+        "webmozart/glob": "^4.1",
+        "mnapoli/silly": "^1.7"
+
+
+
+(new Javanile\DocForge\Compiler())->run($argv);
+
+
+
+

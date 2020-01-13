@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 /**
- * Command-line Elegy.
+ * Command-line DocForge.
  *
  * PHP version 7
  *
@@ -9,9 +9,23 @@
  *
  * @author     Francesco Bianco <bianco@javanile.org>
  * @license    https://goo.gl/KPZ2qI  MIT License
- * @copyright  2015-2020 Javanile.org
+ * @copyright  2015-2020 Javanile
  */
 
-require_once __DIR__.'/../../../autoload.php';
+if (file_exists(__DIR__ . '/vendor/autoload.php')) {
+    require_once __DIR__ . '/vendor/autoload.php';
+} elseif (file_exists(__DIR__ . '/../autoload.php')) {
+    require_once __DIR__ . '/../autoload.php';
+} else {
+    require_once __DIR__ . '/../../autoload.php';
+}
 
-(new Javanile\DocForge\Compiler())->run($argv);
+$cli = new \Garden\Cli\Cli();
+
+$cli->description('Dump some information from your database.')
+    ->opt('config:c', 'Config file.', true)
+    ->opt('theme:t', 'Theme directory.', true)
+    ->opt('output:o', 'Output directory.', false)
+
+$args = $cli->parse($argv, true);
+
