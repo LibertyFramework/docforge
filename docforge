@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 /**
- * Command-line DocForge.
+ * DocForge command-line builder.
  *
  * PHP version 7
  *
@@ -20,7 +20,10 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
     require_once __DIR__ . '/../../autoload.php';
 }
 
-$cli = new \Garden\Cli\Cli();
+use Garden\Cli\Cli;
+use DocForge\Framework\Builder;
+
+$cli = new Cli();
 
 $cli->description('Dump some information from your database.')
     ->opt('config:c', 'Config file.', true)
@@ -29,3 +32,6 @@ $cli->description('Dump some information from your database.')
 
 $args = $cli->parse($argv, true);
 
+$builder = new Builder();
+
+$builder->run();

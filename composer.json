@@ -1,6 +1,10 @@
 {
   "name": "docforge/docforge",
   "version": "0.0.15",
+  "scripts": {
+    "build": "php build.php vendor/docforge/handbook",
+    "serve": "php -S localhost:8080 -t vendor/docforge/handbook/public"
+  },
   "require": {
     "vanilla/garden-cli": "~2.0"
   }
